@@ -1,0 +1,12 @@
+*.aux
+*.sqlite3
+*.DS_Store
+*.gz
+*.log
+*.out
+*.pyc
+*.sqlite3
+*.toc
+
+media/
+venv/

@@ -1,0 +1,45 @@
+
+{% load staticfiles %}
+{% load captcha_extras %}
+
+<!-- CSS Stylesheets -->
+<link rel="stylesheet" href="{% static "stylesheets/captcha.css" %}"/>
+
+<!-- Javascipt Files/Dependencies -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+    function handleClick(checkBox)
+    {
+        var selections = document.getElementById('captcha_selections');
+        if (checkBox.checked)
+        {
+            selections.value |= (1 << checkBox.value);            
+            var height = $('#image-' + checkBox.value).height();
+            document.getElementById('image-' + checkBox.value).style.opacity = '0.33';
+            document.getElementById('div-image-' + checkBox.value).style.background = 'linear-gradient(to bottom, #12b83c ' + height.toString() + 'px, transparent 1px)'; 
+        }
+        else
+        {
+            selections.value &= ~(1 << checkBox.value);            
+            document.getElementById('image-' + checkBox.value).style.opacity = '1.0';
+            document.getElementById('div-image-' + checkBox.value).style.background = 'transparent';
+        }
+    }
+</script>
+
+<div id="captcha_form" class="captcha_form">
+    {% csrf_token %}
+    <input type="hidden" name="captcha_token" value = {{ captcha_token }} />
+    <input type="hidden" id="captcha_selections" name="captcha_selections" value="0" />    
+    <div class="grid">
+        {% for i, image in grid_images %}
+        <div class="col-1-3" id={{"div-image-"|addstr:i}} >
+            <label>
+                <img class="grid-image"  src={% static image %} id={{ "image-"|addstr:i}} alt="" />
+                <input type="checkbox" id={{"image-"|addstr:i|addstr:"-cb"}} name={{"image-"|addstr:i|addstr:"-cb"}} onclick="handleClick(this)" value={{i}} />
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="prompt">{{prompt_string}}</div>
+</div>

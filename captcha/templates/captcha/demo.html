@@ -1,0 +1,66 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<script src="{% static "scripts/load-captcha.js" %}"></script>
+		<style media="screen" type="text/css">
+			#header {
+				width: 100%;
+			}
+
+			#container {
+				padding: 100px 40px 100px 40px;
+				width: 300px;
+				margin: auto;
+			}
+			#first {
+				padding: 200px 40px;
+				width: 60%;
+				height: 100%;
+				float: left;
+				text-align: center;
+			}
+			#second {
+				width: 40%;
+				float: left;
+			}
+			#clear {
+				clear: both;
+			}
+			
+			#demoform {
+				height: 100%;
+				display: inline-block;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<img src="https://placekitten.com/1000/100" style="width: 100%; margin: 0 auto;"/>			
+		</div>
+		<form id="demoform" action="/captcha/demo/" method="post">
+			<div id="first">
+				{% if incorrect %}
+				<p>Invalid captcha response</p>
+				{% endif %}
+				{% if submission_required %}
+				<p>Enter name and solve captcha.</p>
+				Name:
+				<input type="text" name="name"/>
+				<input type="submit" />
+				{% elif not incorrect %}
+				<p>Thank you for your submission, {{name}}.</p>
+				<a href="http://localhost:8001/captcha/demo/">Replay demo</input>
+				{% endif %}	
+			</div>
+			<div id="second">
+				<div class="captcha"></div>				
+			</div>
+			<div id="clear"></div>			
+		</form>		
+		<div id="container">
+		</div>
+	</body>
+</html>
